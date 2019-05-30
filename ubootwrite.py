@@ -20,7 +20,7 @@ LINE_FEED = "\n"
 def getprompt(ser, addr, verbose):
 
         # Send a command who does not produce a result so when receiving the next line feed, only show the prompt will be returned
-        ser.write("mw {0:08x} 0".format(addr) + LINE_FEED)
+        ser.write(("mw {0:08x} 0".format(addr) + LINE_FEED).encode())
         # Flushing read buffer
         while ser.read(256):
                 pass
@@ -28,7 +28,7 @@ def getprompt(ser, addr, verbose):
                 print("Waiting for a prompt...", file = sys.stderr)
         while True:
                 # Write carriage return and wait for a response
-                ser.write(LINE_FEED)
+                ser.write(LINE_FEED.encode())
                 # Read the response
                 buf = ser.read(256);
                 if (buf.endswith(b"> ") or buf.endswith(b"# ")):
@@ -45,8 +45,8 @@ def getprompt(ser, addr, verbose):
 def writecommand(ser, command, prompt, verbose):
 
         # Write the command and a line feed, so we must get back the command and the prompt
-        ser.write(command + LINE_FEED)
-        buf = ser.read(len(command))
+        ser.write((command + LINE_FEED).encode())
+        buf = ser.read(len(command)).decode()
         if (buf != command):
                 if verbose:
                         print("Echo command not received. Instead received '", buf, "'", sep='', file = sys.stderr)
@@ -136,8 +136,8 @@ def memwrite(ser, path, size, start_addr, verbose, debug):
                 print("\rProgress 100%                            ", file = sys.stderr)
 #not possible for zsun              print("File successfully written. You should run 'crc32", " {0:08x}".format(start_addr), " {0:08x}".format(bytes_read), "' on the modem and the result must be", " {0:08x}".format(crc32_checksum), ".", sep='', file = sys.stderr)
 #not needed for zsun                print("To copy from RAM to flash, unprotect flash: 'protect off all'...")
-                print("Then erase flash: 'erase 9f020000 " +{0:08x}".format(bytes_read), "'.", sep='', file = sys.stderr)
-                print("Then copy from RAM to flash: 'cp.b 80060000 9f020000 " {0:08x}".format(bytes_read), "'.", sep='', file = sys.stderr)
+                print("Then erase flash: 'erase 9f020000 " + "{0:08x}".format(bytes_read), "'.", sep='', file = sys.stderr)
+                print("Then copy from RAM to flash: 'cp.b 80060000 9f020000 " + "{0:08x}".format(bytes_read), "'.", sep='', file = sys.stderr)
 
         fd.close()
         return
