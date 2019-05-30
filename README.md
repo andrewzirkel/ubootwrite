@@ -10,6 +10,8 @@ Basically it can only be [GPLv3](http://opensource.org/licenses/GPL-3.0), becaus
 Overview
 ========
 Use Python (preferably 3.0+) to run the tool: ```python ubootwrite.py [OPTIONS]```.  
+Make sure pyserial has been installed or install by ```pip install pyserial```
+
 **Options:**  
 * ```--verbose``` - Be verbose.  
 * ```--serial``` - The serial port to write to, e.g. ```--serial=/dev/ttyUSB2```. It will open it with 115200 Baud, 8 data bits, one stop bit.  
